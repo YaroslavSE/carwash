@@ -6,8 +6,10 @@ const SubscriptionPlan = sequelize.define('subscription_plan', {
   name:             { type: DataTypes.STRING(100), allowNull: false },
   description:      { type: DataTypes.TEXT },
   price:            { type: DataTypes.DECIMAL(10, 2), allowNull: false },
-  duration_days:    { type: DataTypes.INTEGER, allowNull: false },
-  washes_included:  { type: DataTypes.INTEGER, allowNull: false },
+  duration_days:    { type: DataTypes.INTEGER, allowNull: false, defaultValue: 30 },
+  is_unlimited:     { type: DataTypes.BOOLEAN, defaultValue: false },
+  washes_included:  { type: DataTypes.INTEGER, defaultValue: 0 },
+  daily_limit:      { type: DataTypes.INTEGER, defaultValue: 1 },
   discount_percent: { type: DataTypes.INTEGER, defaultValue: 0 },
 });
 

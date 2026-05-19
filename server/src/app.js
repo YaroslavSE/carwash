@@ -11,6 +11,7 @@ const branchRoutes       = require('./routes/branch.routes');
 const subscriptionRoutes = require('./routes/subscription.routes');
 const paymentRoutes      = require('./routes/payment.routes');
 const adminRoutes        = require('./routes/admin.routes');
+const reviewRoutes       = require('./routes/review.routes');
 
 const app = express();
 
@@ -29,5 +30,6 @@ app.use('/api/branches',      branchRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/account',       paymentRoutes);
 app.use('/api/admin',         adminRoutes);
+app.use('/api/reviews',       reviewRoutes);
 
 module.exports = app;

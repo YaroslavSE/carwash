@@ -5,6 +5,7 @@ const { requireAuth } = require('../middleware/auth.middleware');
 router.use(requireAuth);
 
 router.get('/',           c.getMyOrders);
+router.get('/schedule',   c.getSchedule);
 router.get('/:id',        c.getOrderById);
 router.post('/',          c.createOrder);
 router.patch('/:id/cancel', c.cancelOrder);

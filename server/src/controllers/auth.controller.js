@@ -55,8 +55,11 @@ async function register(req, res) {
       },
     });
   } catch (err) {
-    await t.rollback();
-    console.error(err);
+    try { await t.rollback(); } catch(e) {}
+    console.error("REGISTRATION ERROR:", err);
+    if (err.name === 'SequelizeUniqueConstraintError') {
+      return res.status(409).json({ message: 'Цей email або телефон вже використовується' });
+    }
     res.status(500).json({ message: 'Помилка сервера' });
   }
 }

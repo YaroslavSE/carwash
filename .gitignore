@@ -21,12 +21,7 @@ coverage
 
 # Environment variables
 # The user specifically requested .env to be included in git
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-!.env
-!*/.env
+
 
 # OS/Editor
 .DS_Store

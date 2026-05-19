@@ -26,6 +26,10 @@ const Employee = sequelize.define('employee', {
   phone: {
     type: DataTypes.STRING(20),
   },
+  password_hash: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   hire_date: {
     type: DataTypes.DATEONLY,
     allowNull: false,
