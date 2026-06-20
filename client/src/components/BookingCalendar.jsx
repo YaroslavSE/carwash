@@ -31,7 +31,8 @@ const BookingCalendar = ({ branchId, capacity, workingHours, totalDurationMinute
     const fetchSchedule = async () => {
       setLoading(true);
       try {
-        const dateStr = currentDate.toISOString().split('T')[0];
+        const pad = (n) => n.toString().padStart(2, '0');
+        const dateStr = `${currentDate.getFullYear()}-${pad(currentDate.getMonth()+1)}-${pad(currentDate.getDate())}`;
         const res = await api.get(`/orders/schedule?branch_id=${branchId}&date=${dateStr}`);
         setOrders(res.data);
       } catch (err) {

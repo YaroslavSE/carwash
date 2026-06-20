@@ -147,6 +147,16 @@ async function createOrder(req, res) {
       applied_subscription_id = activeSubscription.subscription_id;
     }
 
+    const amountToPay = total_amount - discount_amount;
+    if (amountToPay > 0) {
+      const { Account } = require('../models');
+      const account = await Account.findOne({ where: { client_id: req.user.clientId }, transaction: t });
+      if (!account || parseFloat(account.balance) < amountToPay) {
+        await t.rollback();
+        return res.status(400).json({ message: 'Недостатньо коштів на балансі для оформлення замовлення. Будь ласка, поповніть рахунок.' });
+      }
+    }
+
     const order = await Order.create({
       client_id: req.user.clientId,
       branch_id,
