@@ -35,7 +35,7 @@ const Layout = () => {
         </Toolbar>
       </AppBar>
 
-      <Box sx={{ flexGrow: 1, overflow: 'auto', p: 2 }}>
+      <Box sx={{ flexGrow: 1, overflow: 'auto', p: 2, display: 'flex', flexDirection: 'column' }}>
         <Outlet />
       </Box>
 

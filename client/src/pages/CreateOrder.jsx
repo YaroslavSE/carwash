@@ -49,10 +49,16 @@ const CreateOrder = () => {
     setLoading(true);
     try {
       const selectedServicesData = services.filter(s => selectedServices.includes(s.service_id));
+      
+      const pad = (n) => n.toString().padStart(2, '0');
+      // Append .000Z so the backend stores the numerical local time directly,
+      // canceling out the pg driver's local time parse shift on read.
+      const localIso = `${scheduledTime.getFullYear()}-${pad(scheduledTime.getMonth()+1)}-${pad(scheduledTime.getDate())}T${pad(scheduledTime.getHours())}:${pad(scheduledTime.getMinutes())}:00.000Z`;
+
       const payload = {
         branch_id: selectedBranch,
         box_number: selectedBox,
-        scheduled_time: scheduledTime.toISOString(),
+        scheduled_time: localIso,
         services: selectedServicesData.map(s => ({
           service_id: s.service_id,
           quantity: 1,

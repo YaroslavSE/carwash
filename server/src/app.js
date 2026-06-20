@@ -12,6 +12,8 @@ const subscriptionRoutes = require('./routes/subscription.routes');
 const paymentRoutes      = require('./routes/payment.routes');
 const adminRoutes        = require('./routes/admin.routes');
 const reviewRoutes       = require('./routes/review.routes');
+const stripeRoutes       = require('./routes/stripe.routes');
+const stripeController   = require('./controllers/stripe.controller');
 
 const app = express();
 
@@ -20,6 +22,10 @@ app.use(cors({
   origin: process.env.CORS_ORIGIN.split(','),
   credentials: true,
 }));
+
+// Webhook requires raw body for Stripe signature verification
+app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), stripeController.handleWebhook);
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -31,5 +37,6 @@ app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/account',       paymentRoutes);
 app.use('/api/admin',         adminRoutes);
 app.use('/api/reviews',       reviewRoutes);
+app.use('/api/stripe',        stripeRoutes);
 
 module.exports = app;

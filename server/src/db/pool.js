@@ -7,6 +7,12 @@ const pool = new Pool({
   database: process.env.DB_NAME,
   user:     process.env.DB_USER,
   password: process.env.DB_PASSWORD,
+  ...(process.env.DB_HOST.includes('amazonaws.com') && {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
+  })
 });
 
 pool.on('error', (err) => {

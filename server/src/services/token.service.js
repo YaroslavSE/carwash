@@ -13,18 +13,14 @@ async function redisCommand(...args) {
 }
 
 function generateTokens(payload) {
-  const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
-    expiresIn: process.env.JWT_ACCESS_EXPIRES,
-  });
-  const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
-    expiresIn: process.env.JWT_REFRESH_EXPIRES,
-  });
+  const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET);
+  const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET);
   return { accessToken, refreshToken };
 }
 
-// Зберігаємо refresh токен в Upstash (TTL 7 днів)
+// Зберігаємо refresh токен в Upstash (без TTL)
 async function saveRefreshToken(clientId, token) {
-  await redisCommand('SET', `refresh:${clientId}`, token, 'EX', 604800);
+  await redisCommand('SET', `refresh:${clientId}`, token);
 }
 
 async function getRefreshToken(clientId) {

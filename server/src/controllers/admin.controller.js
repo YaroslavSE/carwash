@@ -212,10 +212,13 @@ async function deleteEmployee(req, res) {
       return res.status(403).json({ message: 'Немає доступу до співробітника іншої філії' });
     }
 
-    await employee.update({ is_active: false });
-    return res.json({ message: 'Співробітника деактивовано' });
+    await employee.destroy();
+    return res.json({ message: 'Співробітника видалено' });
   } catch (err) {
     console.error(err);
+    if (err.name === 'SequelizeForeignKeyConstraintError') {
+      return res.status(400).json({ message: 'Неможливо видалити співробітника, оскільки він має повʼязані замовлення.' });
+    }
     res.status(500).json({ message: 'Помилка сервера' });
   }
 }
@@ -388,10 +391,13 @@ async function deleteBranch(req, res) {
     const branch = await Branch.findByPk(req.params.id);
     if (!branch) return res.status(404).json({ message: 'Філію не знайдено' });
 
-    await branch.update({ is_active: false });
-    return res.json({ message: 'Філію деактивовано' });
+    await branch.destroy();
+    return res.json({ message: 'Філію видалено' });
   } catch (err) {
     console.error(err);
+    if (err.name === 'SequelizeForeignKeyConstraintError') {
+      return res.status(400).json({ message: 'Неможливо видалити філію, оскільки вона має повʼязані дані (співробітники, замовлення тощо).' });
+    }
     res.status(500).json({ message: 'Помилка сервера' });
   }
 }
@@ -447,10 +453,13 @@ async function deleteService(req, res) {
     const service = await Service.findByPk(req.params.id);
     if (!service) return res.status(404).json({ message: 'Послугу не знайдено' });
 
-    await service.update({ is_active: false });
-    return res.json({ message: 'Послугу деактивовано' });
+    await service.destroy();
+    return res.json({ message: 'Послугу видалено' });
   } catch (err) {
     console.error(err);
+    if (err.name === 'SequelizeForeignKeyConstraintError') {
+      return res.status(400).json({ message: 'Неможливо видалити послугу, оскільки вона використовується в замовленнях або філіях.' });
+    }
     res.status(500).json({ message: 'Помилка сервера' });
   }
 }

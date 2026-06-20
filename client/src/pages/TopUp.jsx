@@ -13,17 +13,22 @@ const TopUp = () => {
   const handleTopUp = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/account/top-up', { amount: Number(amount) });
-      await fetchUser();
-      navigate('/');
+      // Call our new Stripe endpoint
+      const response = await api.post('/stripe/create-checkout-session', { amount: Number(amount) });
+      if (response.data && response.data.url) {
+        // Redirect the user to Stripe Checkout
+        window.location.href = response.data.url;
+      } else {
+        setError('Не вдалося створити платіжну сесію');
+      }
     } catch (err) {
-      setError(err.response?.data?.message || 'Помилка поповнення');
+      setError(err.response?.data?.message || 'Помилка створення платежу');
     }
   };
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
-      <Paper elevation={0} sx={{ p: 4, width: '100%', maxWidth: 400, borderRadius: 3, border: '1px solid', borderColor: 'divider' }}>
+    <Box flex={1} display="flex" justifyContent="center" alignItems="center" width="100%" height="100%">
+      <Paper elevation={0} sx={{ p: 4, m: 'auto', width: '100%', maxWidth: 400, borderRadius: 3, border: '1px solid', borderColor: 'divider' }}>
         <Typography variant="h5" fontWeight="bold" textAlign="center" mb={1}>
           Поповнення балансу
         </Typography>

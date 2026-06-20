@@ -9,6 +9,7 @@ import Orders from './pages/Orders';
 import CreateOrder from './pages/CreateOrder';
 import Subscriptions from './pages/Subscriptions';
 import TopUp from './pages/TopUp';
+import TopUpSuccess from './pages/TopUpSuccess';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -48,6 +49,7 @@ function App() {
         <Route path="orders/create" element={<CreateOrder />} />
         <Route path="subscriptions" element={<Subscriptions />} />
         <Route path="topup" element={<TopUp />} />
+        <Route path="top-up/success" element={<TopUpSuccess />} />
       </Route>
     </Routes>
   );

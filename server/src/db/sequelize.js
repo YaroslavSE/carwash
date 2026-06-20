@@ -9,6 +9,12 @@ const sequelize = new Sequelize(
     port: parseInt(process.env.DB_PORT),
     dialect: 'postgres',
     logging: process.env.NODE_ENV === 'development' ? console.log : false,
+    dialectOptions: process.env.DB_HOST.includes('amazonaws.com') ? {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    } : {},
     define: {
       timestamps: false,      // у нас свої поля created_at
       underscored: true,      // snake_case як в БД
