@@ -15,6 +15,11 @@ async function getAllOrders(req, res) {
 
   if (status) where.status = status;
   if (branch_id) where.branch_id = branch_id;
+
+  if (req.user.role === 'manager') {
+    where.branch_id = req.employee.branch_id;
+  }
+
   if (date_from || date_to) {
     where.scheduled_time = {};
     if (date_from) where.scheduled_time[Op.gte] = new Date(date_from);
@@ -52,6 +57,11 @@ async function updateOrderStatus(req, res) {
     if (!order) {
       await t.rollback();
       return res.status(404).json({ message: 'Замовлення не знайдено' });
+    }
+
+    if (req.user.role === 'manager' && order.branch_id !== req.employee.branch_id) {
+      await t.rollback();
+      return res.status(403).json({ message: 'Немає доступу до замовлення іншої філії' });
     }
 
     if (status === 'completed' && order.status !== 'completed') {
